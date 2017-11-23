@@ -1,0 +1,25 @@
+{% include "vendas/base.html" with menu = items %}
+
+{% load static %}
+
+{% block titulo %}
+    {{ produto.nome }}
+{% endblock %}
+
+{% block conteudo %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                <img class="img-rounded img-responsive center-block"
+                     style="min-height: 200px;"
+                     src="{% static '/vendas/imagens/' %}{{ produto.imagem }}">
+            </div>
+            <div class="col-sm-9">
+                <h2>{{ produto.nome }}</h2>
+                <h3><a href="{{ produto.categoria.get_absolute_path }}">{{ produto.categoria.nome }}</a></h3>
+                <p>R$ {{ produto.preco }}</p>
+                <p>{{ produto.descricao }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

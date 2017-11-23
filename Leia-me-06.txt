@@ -1,0 +1,326 @@
+﻿**************************************************************************************************************
+**********          C R I A Ç Ã O   D A   I N T E R F A C E   P Ú B L I C A  -  V I E W S           **********
+**************************************************************************************************************
+
+Visão Geral
+-----------
+
+Na nossa aplicação de vendas, teremos em princípio as seguintes views:
+
+- A view responsável por recuperar os dados que devem ser  exibidos na página de  abertura do site (que mostra
+  os produtos disponíveis).
+- A view responsável por recuperar os dados referentes a um determinado produto.
+
+Cada view é  representada por uma função  Python simples (ou método,  no caso de views  baseadas em  classes).
+Django  irá  escolher  uma  view (que será executada)  examinando o URL  que é  requisitado,  isto é, a  parte
+do URL após o nome de domínio).
+
+Na utilização de aplicações web você já deve ter se deparado com urls nada elegantes como o seguinte:
+“ME2/Sites/dirmod.asp?sid=&type=gen&mod=Core+Pages&gid=A6CD4967199A42D9B65B1B”.
+
+Com o DJango, para executarmos uma view a partir de um URL, é utilizado um ‘URLconfs’. Um URLconf  mapeia  cada
+URL (descrito com uma expressão regular) a uma view.
+
+
+O Arquivo loja/urls.py
+----------------------
+
+urlpatterns = [
+    url(r'^admin/', admin.site.urls),
+    url(r'^', include('vendas.urls', namespace='vendas'))
+
+    # http://localhost:8000  ==>  Exibirá a página de abertura do site que exibe a lista de produtos disponíveis
+    # Não é preciso o url: http://localhost:8000/vendas
+]
+
+O Arquivo vendas/urls.py
+------------------------
+
+***************************************************************************
+**
+from django.conf.urls import url
+from . import views
+
+# O URLconf abaixo trata requisições para http://localhost:8000
+# url(r'^$', views.lista_produtos, name='lista_produtos'),
+
+# E este URLconf trata requisições para http://localhost:8000/computador/
+# url(r'^(?P<slug_da_categoria>[-\w]+)/$', views.lista_produtos, name='lista_produtos_por_categoria'),
+
+urlpatterns = [
+    # Esta primeira view tem por objetivo listar todos os produtos
+    url(r'^$', views.lista_produtos, name='lista_produtos'),
+
+    # E esta view é utilizada para listar os produtos de uma determinada categoria
+    url(r'^(?P<slug_da_categoria>[-\w]+)/$', views.lista_produtos, name='lista_produtos_por_categoria'),
+
+    # Esta view é utilizada para exibir um determinado produto
+    url(r'^(?P<id>\d+)/(?P<slug_do_produto>[-\w]+)/$', views.exibe_produto, name='exibe_produto'),
+
+    # ?	- zero ou um do elemento anterior.
+    # *	- zero ou mais do elemento anterior.
+    # +	- um ou mais do elemento anterior.
+    # \w - para encontrar um word character. Um word character é um caracter de a-z, A-Z, 0-9, e _ (underscore).
+]
+**
+***************************************************************************
+
+
+As Views da Aplicação
+---------------------
+
+a) A view lista_produtos:
+
+***************************************************************************
+**
+from django.shortcuts import render, get_object_or_404
+from .models import Categoria, Produto
+
+def lista_produtos(request):
+    categoria = None
+    categorias = Categoria.objects.all()
+    produtos = Produto.objects.filter(disponivel=True)[:5]
+    if slug_da_categoria:
+        categoria = get_object_or_404(Categoria, slug=slug_da_categoria)
+        produtos = produtos.filter(categoria=categoria)
+
+    return render(request, 'vendas/produto/lista.html', {'categorias': categorias,
+                                                         'produtos': produtos,
+                                                         'categoria': categoria})
+**
+***************************************************************************
+
+
+b) A view exibe_produto:
+
+***************************************************************************
+**
+def exibe_produto(request, id, slug_do_produto):
+    # Esta view espera receber o id do produto e seu slug para recuperar o produto
+    # Podemos recuperar o produto apenas com o seu id uma vez que ele é unique.
+    # Incluímos o slug para podermos construir 'SEO friendly URLs'.
+    # SEO = Search Engine Optimization.
+    # Exemplo: http://www.dominio.com.br/produto?id=721 <== Ruim
+    # Exemplo: http://www.dominio.com.br/721/notebook-del-vostro-3458-i3 <== Bom
+    produto = get_object_or_404(Produto, id=id, slug=slug_do_produto, disponivel=True)
+    return render(
+        request, 'vendas/produto/exibe.html', {'produto': produto})
+**
+***************************************************************************
+
+
+Adicionando Métodos às Classes do Modelo
+----------------------------------------
+
+a) Adicione o método abaixo à classe Categoria:
+
+***************************************************************************
+**
+    def get_absolute_path(self):
+        return reverse('vendas:lista_produtos_por_categoria', args=[self.slug])
+**
+***************************************************************************
+
+b) Adicione o método abaixo à classe Produto:
+
+***************************************************************************
+**
+    def get_absolute_path(self):
+        return reverse('vendas:exibe_produto', args=[self.id, self.slug])
+**
+***************************************************************************
+
+
+
+O template lista.html
+
+***************************************************************************
+**
+{% extends "vendas/base.html" %}
+
+{% load static %}
+
+{% block titulo %}
+    Produtos
+{% endblock %}
+
+{% block conteudo %}
+
+    {% static "vendas/imagens/" as baseUrl %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h2>Categorias</h2>
+                        <ul class="nav nav-pills nav-stacked">
+                            <li class="active">
+                                <a href="/">Todos</a>
+                            </li>
+                            <li>
+                                <a href="/celular/">Celular</a>
+                            </li>
+                            <li>
+                                <a href="/computador/">Computador</a>
+                            </li>
+                            <li>
+                                <a href="/eletrodomestico/">Eletrodoméstico</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-sm-9">
+                        <h2>Produtos</h2>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-6">
+                                <div class="thumbnail">
+                                    <a href="/6/smartphone-samsung-galaxy-s8-plus/">
+                                        <img class="img-rounded img-responsive center-block" src="/static/vendas/imagens/smartphone-samsung-galaxy-s8-plus.jpg" height="220" width="150">
+                                    </a>
+                                    <div class="caption">
+                                        <h4><a href="/6/smartphone-samsung-galaxy-s8-plus/">Smartphone Samsung Galaxy S8+</a></h4>
+                                        R$ 3799,00
+                                        <br>
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-sm-6">
+                                <div class="thumbnail">
+                                    <a href="/5/smartphone-samsung-galaxy-s8/">
+                                        <img class="img-rounded img-responsive center-block" src="/static/vendas/imagens/smartphone-samsung-galaxy-s8.jpg" height="220" width="150">
+                                    </a>
+                                    <div class="caption">
+                                        <h4><a href="/5/smartphone-samsung-galaxy-s8/">Smartphone Samsung Galaxy S8</a></h4>
+                                        R$ 3238,00
+                                        <br>
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-sm-6">
+                                <div class="thumbnail">
+                                    <a href="/2/computador-com-monitor-led-19-5-easypc-intel-core-i5-8gb-hd-1tb/">
+                                        <img class="img-rounded img-responsive center-block" src="/static/vendas/imagens/computador-com-monitor-led-19-5-easypc-intel-core-i5-8gb-hd-1tb.jpg" height="220" width="150">
+                                    </a>
+                                    <div class="caption">
+                                        <h4><a href="/2/computador-com-monitor-led-19-5-easypc-intel-core-i5-8gb-hd-1tb/">Computador Com Monitor Led 19,5 Easypc Intel Core I5</a></h4>
+                                        R$ 3399,00
+                                        <br>
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-sm-6">
+                                <div class="thumbnail">
+                                    <a href="/1/computador-intel-dual-core-2gb-hd-320gb-hdmi-e-monitor-led-15-6/">
+                                        <img class="img-rounded img-responsive center-block" src="/static/vendas/imagens/computador-intel-dual-core-2gb-hd-320gb-hdmi-e-monitor-led-15-6.jpg" height="220" width="150">
+                                    </a>
+                                    <div class="caption">
+                                        <h4><a href="/1/computador-intel-dual-core-2gb-hd-320gb-hdmi-e-monitor-led-15-6/">Computador Intel Dual Core Com Monitor Led 15,6" Intel Dual Core</a></h4>
+                                        R$ 2229,00
+                                        <br>
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-sm-6">
+                                <div class="thumbnail">
+                                    <a href="/4/computador-gamer-com-monitor-15-amd-quad-core-a8-7600-8gb-hd-1tb-radeon-r7-3green-titan/">
+                                        <img class="img-rounded img-responsive center-block" src="/static/vendas/imagens/computador-gamer-com-monitor-15-amd-quad-core-a8-7600-8gb-hd-1tb-radeon-r7-3green-titan.jpg" height="220" width="150">
+                                    </a>
+                                    <div class="caption">
+                                        <h4><a href="/4/computador-gamer-com-monitor-15-amd-quad-core-a8-7600-8gb-hd-1tb-radeon-r7-3green-titan/">Computador Gamer Com Monitor 15 Amd Quad Core A8</a></h4>
+                                        R$ 4149,00
+                                        <br>
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-sm-6">
+                                <div class="thumbnail">
+                                    <a href="/7/fogao-electrolux-5-bocas-76DPB-branco-com-duplo-forno-e-timer/">
+                                        <img class="img-rounded img-responsive center-block" src="/static/vendas/imagens/fogao-electrolux-5-bocas-76DPB-branco-com-duplo-forno-e-timer.jpg" height="220" width="150">
+                                    </a>
+                                    <div class="caption">
+                                        <h4><a href="/7/fogao-electrolux-5-bocas-76DPB-branco-com-duplo-forno-e-timer/">Fogão Electrolux 5 Bocas Branco</a></h4>
+                                        R$ 1799,00
+                                        <br>
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+**
+***************************************************************************
+
+
+O template exibe.html
+
+***************************************************************************
+**
+{% extends "vendas/base.html" %}
+
+{% load static %}
+
+{% block titulo %}
+    Smartphone Samsung Galaxy S8+
+{% endblock %}
+
+{% block conteudo %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                <a href="#">
+                    <img class="img-rounded img-responsive center-block" src="/static/vendas/imagens/smartphone-samsung-galaxy-s8-plus.jpg">
+                </a>
+            </div>
+            <div class="col-sm-9">
+                <h2>Smartphone Samsung Galaxy S8+</h2>
+                <h3><a href="/celular/">Celular</a></h3>
+                <p>R$ 3799,00</p>
+                <p>Smartphone Samsung Galaxy S8+ Dual Chip Android 7.0 Tela 6.2"</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+**
+***************************************************************************
+
+
+Acrescentar a linha abaixo em loja/settings.py:
+
+***************************************************************************
+**
+USE_THOUSAND_SEPARATOR = True
+**
+***************************************************************************
+
+
+
+Veja em https://docs.djangoproject.com/en/1.11/topics/templates/ para mais informações sobre templates.
+
+Jinja2 é uma alternativa popular para o sistema de templates do Django: http://jinja.pocoo.org/
+
+A linguagem de template do Django: https://docs.djangoproject.com/en/1.11/ref/templates/language/
+
+
+Para uma aplicação em desenvolvimento use:
+- DEBUG = True
+
+Para uma aplicação em produção use:
+- DEBUG = False
+- ALLOWED_HOSTS = ['*']     ## Ou o ip ou www.dominio.com.br
+

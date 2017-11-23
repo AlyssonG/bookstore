@@ -1,0 +1,21 @@
+.barra {
+    overflow-y: scroll;
+}
+
+.thumbnail {
+    border: 0px;
+}
+
+#inicio {
+    padding-top: 50px;
+    widthcolor: #fff;
+    background-color: #1E88E5;
+}
+
+#livros {
+    padding-top: 50px;
+}
+
+#rodape {
+    padding-top: 50px;
+}

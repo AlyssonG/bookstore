@@ -1,0 +1,37 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'vendas/css/bootstrap.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'vendas/css/base.css' %}"/>
+    <title>{% block titulo %}Loja Virtual{% endblock %}</title>
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <a class="navbar-brand">Livraria do Jão</a>
+    {% block navbar %}
+        <ul class="nav navbar-nav">
+            {% for item in itens %}
+                <li><a href="{{ item.ref }}">{{ item.texto }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endblock %}
+</nav>
+
+<div class="well well-md">
+    &nbsp;
+</div>
+
+{% block conteudo %}
+
+{% endblock %}
+
+<script src="{% static 'vendas/js/jquery-1.12.4.js' %}"></script>
+<script src="{% static 'vendas/js/bootstrap.js' %}"></script>
+<script src="{% static 'vendas/js/script.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+{% extends "vendas/base.html" %}
+
+{% block navbar %}
+    {% with menu as itens %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% load static %}
+
+{% block titulo %}
+    {% if not categoria %}Produtos{% else %}{{ categoria.nome }}{% endif %}
+{% endblock %}
+
+{% block conteudo %}
+
+    {% static "vendas/imagens/" as baseUrl %}
+    <div id="inicio">
+    <div class="jumbotron">
+        {% for desc in descricao %}
+            {% with '/'|add:desc.size as tag %}
+                <{{ desc.size }} align="center">{{ desc.texto }}<{{ tag | safe }}>
+            {% endwith %}
+        {% endfor %}
+    </div>
+    <div id="carousel" class="carousel slide" align="center" data-ride="carousel">
+        <div class="carousel-inner" style="width: 259px; height: 194px">
+            {% for img in carousel %}
+                {% if forloop.first %}
+                    <div class="item active">
+                {% else %}
+                    <div class="item">
+                {% endif %}
+            <img class="d-block w-100 h-100 img-circle" src="{% static '/vendas/imagens/' %}/{{ img }}">
+            </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="container" id="livros">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                {% for titulo in tabela %}
+                    <th>{{ titulo }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+          <tbody>
+          {% for produto in produtos %}
+            <tr>
+                <td class="book">{{ produto.nome }}</td>
+                <td><span class="badge">{{ produto.estoque }}</span></td>
+                <td class="price" name="">{{ produto.preco }}</td>
+                <td>
+                    <button type="button" class="btn btn-xs btn-info">
+                        {{ produto.botao }}
+                    </button>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+    {##}
+    {#    <div class="container">#}
+    {#        <div class="row">#}
+    {#            <div class="col-sm-12">#}
+    {#                <div class="row">#}
+    {#                    <div class="col-sm-3">#}
+    {#                        <h2>Categorias</h2>#}
+    {#                        <ul class="nav nav-pills nav-stacked">#}
+    {#                            <li {% if not categoria %}class="active"{% endif %}>#}
+    {#                                <a href="{% url 'vendas:lista_produtos' %}">Todos</a>#}
+    {#                            </li>#}
+    {#                            {% for c in categorias %}#}
+    {#                                <li {% if categoria.slug == c.slug %}class="active"{% endif %}>#}
+    {#                                    <a href="{{ c.get_absolute_path }}">{{ c.nome }}</a>#}
+    {#                                </li>#}
+    {#                            {% endfor %}#}
+    {#                        </ul>#}
+    {#                    </div>#}
+    {##}
+    {#                    <div class="col-sm-9">#}
+    {#                        <h2>{% if not categoria %}Produtos{% else %}{{ categoria.nome }}{% endif %}</h2>#}
+    {#                        <div class="row">#}
+    {#                            {% for produto in produtos %}#}
+    {#                                <div class="col-md-4 col-sm-6">#}
+    {#                                    <div class="thumbnail">#}
+    {#                                        <a href="{{ produto.get_absolute_path }}">#}
+    {#                                            <img class="img-rounded img-responsive center-block"#}
+    {#                                                 src="{% static '/vendas/imagens/' %}{{ produto.imagem }}" height="220" width="150">#}
+    {#                                        </a>#}
+    {#                                        <div class="caption">#}
+    {#                                            <h4><a href="{{ produto.get_absolute_path }}">{{ produto.nome }}</a></h4>#}
+    {#                                            R$ {{ produto.preco }}#}
+    {#                                            <br>#}
+    {#                                            <br>#}
+    {#                                        </div>#}
+    {#                                    </div>#}
+    {#                                </div>#}
+    {#                            {% endfor %}#}
+    {#                        </div>#}
+    {#                    </div>#}
+    {#                </div>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
+{% endblock %}
