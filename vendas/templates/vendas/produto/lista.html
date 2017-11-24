@@ -46,41 +46,59 @@
                 {% endfor %}
             </tr>
             </thead>
-          <tbody>
-          {% for produto in produtos %}
-            <tr>
-                <td class="book">{{ produto.nome }}</td>
-                <td><span class="badge">{{ produto.estoque }}</span></td>
-                <td class="price" name="">{{ produto.preco }}</td>
-                <td>
-                    <button type="button" class="btn btn-xs btn-info">
-                        {{ produto.botao }}
-                    </button>
-                </td>
-            </tr>
-        {% endfor %}
+            <tbody>
+            {% for produto in produtos %}
+                <tr>
+                    <td class="book">{{ produto.nome }}</td>
+                    <td><span class="badge">{{ produto.estoque }}</span></td>
+                    <td class="price" name="">{{ produto.preco }}</td>
+                    <td>
+                        <button type="button" class="btn btn-xs btn-info">
+                            {{ produto.botao }}
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
         </table>
     </div>
     <div id="rodape" class="well">
-    <footer>
-        <span align="center">{{ comment.0 }}</span>
-        <form action="" id="comment">
-            <div class="input-group">
-                <span class="input-group-addon">{{ comment.1 }}</span>
-                <input type="text" class="form-control input-lg" aria-label="Comentário"
-                       placeholder="{{ comment.2 }}">
-                <textarea rows="4" class="form-control input-sm" cols="50" name="comment"
-                          placeholder="{{ comment.3 }}"></textarea>
+        <footer>
+            <span align="center">{{ comment.0 }}</span>
+            <form action="" id="comment">
+                <div class="input-group">
+                    <span class="input-group-addon">{{ comment.1 }}</span>
+                    <input type="text" class="form-control input-lg" aria-label="Comentário"
+                           placeholder="{{ comment.2 }}">
+                    <textarea rows="4" class="form-control input-sm" cols="50" name="comment"
+                              placeholder="{{ comment.3 }}"></textarea>
+                </div>
+            </form>
+            <div align="right">
+                <button onclick="cleanForm();" type="button" class="btn btn-xs btn-info" data-toggle="modal"
+                        data-target="#feedback">
+                    {{ comment.4 }}
+                </button>
             </div>
-        </form>
-        <div align="right">
-            <button onclick="cleanForm();" type="button" class="btn btn-xs btn-info" data-toggle="modal"
-                    data-target="#feedback">
-                {{ comment.4 }}
-            </button>
+        </footer>
+    </div>
+
+    <div id="feedback" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="alert alert-success">
+                        <h4 align="center" class="modal-title">{{ comment.5 }}</h4>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <p align="center">{{ comment.6 }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ comment.7 }}</button>
+                </div>
+            </div>
         </div>
-    </footer>
-</div>
+    </div>
 
     {##}
     {#    <div class="container">#}
