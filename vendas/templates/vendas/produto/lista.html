@@ -61,6 +61,27 @@
         {% endfor %}
         </table>
     </div>
+    <div id="rodape" class="well">
+    <footer>
+        <span align="center">{{ comment.0 }}</span>
+        <form action="" id="comment">
+            <div class="input-group">
+                <span class="input-group-addon">{{ comment.1 }}</span>
+                <input type="text" class="form-control input-lg" aria-label="Comentário"
+                       placeholder="{{ comment.2 }}">
+                <textarea rows="4" class="form-control input-sm" cols="50" name="comment"
+                          placeholder="{{ comment.3 }}"></textarea>
+            </div>
+        </form>
+        <div align="right">
+            <button onclick="cleanForm();" type="button" class="btn btn-xs btn-info" data-toggle="modal"
+                    data-target="#feedback">
+                {{ comment.4 }}
+            </button>
+        </div>
+    </footer>
+</div>
+
     {##}
     {#    <div class="container">#}
     {#        <div class="row">#}

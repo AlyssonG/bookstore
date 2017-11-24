@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Categoria, Produto, Menu, Carousel, Descricao, Tabela
+from .models import Categoria, Produto, Menu, Carousel, Descricao, Tabela, Rodape
+
 
 def lista_produtos(request, slug_da_categoria=None):
     categoria = None
@@ -15,7 +16,9 @@ def lista_produtos(request, slug_da_categoria=None):
                                                          'menu' : get_menu_categorias(),
                                                          'carousel' : get_carousel(),
                                                          'descricao': get_descricao(),
+                                                         'comment': get_rodape(),
                                                          'tabela': get_tabela()})
+
 
 def exibe_produto(request, id, slug_do_produto):
     # Esta view espera receber o id do produto e seu slug para recuperar o produto
@@ -28,18 +31,26 @@ def exibe_produto(request, id, slug_do_produto):
     return render(
         request, 'vendas/produto/exibe.html', {'produto': produto})
 
+
 def get_menu_categorias():
     menu = Menu.objects.all()
     return menu
+
 
 def get_carousel():
     carousel = Carousel.objects.all()
     return carousel
 
+
 def get_descricao():
     descricao = Descricao.objects.all()
     return descricao
 
+
 def get_tabela():
     tabela = Tabela.objects.all()
     return tabela
+
+def get_rodape():
+    rodape = Rodape.objects.all()
+    return rodape
