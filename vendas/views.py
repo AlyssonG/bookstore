@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Categoria, Produto, Menu, Carousel, Descricao, Tabela, Rodape
+from carrinho.forms import FormularioParaAdicaoDeProdutosAoCarrinho
 
 
 def lista_produtos(request, slug_da_categoria=None):

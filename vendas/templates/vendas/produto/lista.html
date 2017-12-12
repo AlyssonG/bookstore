@@ -53,9 +53,9 @@
                     <td><span class="badge">{{ produto.estoque }}</span></td>
                     <td class="price" name="">{{ produto.preco }}</td>
                     <td>
-                        <button type="button" class="btn btn-xs btn-info">
+                        <a class="btn btn-xs btn-info" href="{{ produto.get_absolute_path }}">
                             {{ produto.botao }}
-                        </button>
+                        </a>
                     </td>
                 </tr>
             {% endfor %}
