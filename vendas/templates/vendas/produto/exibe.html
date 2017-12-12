@@ -18,8 +18,50 @@
                 <h2>{{ produto.nome }}</h2>
                 <h3><a href="{{ produto.categoria.get_absolute_path }}">{{ produto.categoria.nome }}</a></h3>
                 <p>R$ {{ produto.preco }}</p>
+                <form class="form-inline" action="{% url "carrinho:adicionar_ao_carrinho" produto.id %}" method="post">
+                    {{ form_adicionar_produto_carrinho }}         {# *1 #}
+                    {% csrf_token %}                              {# *2 #}
+                    <input class="btn btn-primary" type="submit" value="Adicionar ao carrinho">
+                </form>
                 <p>{{ produto.descricao }}</p>
             </div>
         </div>
     </div>
 {% endblock %}
+
+{#              class FormularioParaAdicaoDeProdutosAoCarrinho(forms.Form):                                        #}
+{#                  quantidade = forms.TypedChoiceField(                                                           #}
+{#                      label="Quantidade ",                                                                       #}
+{#                      choices=OPCOES_DE_QUANTIDADE_PARA_O_PRODUTO,                                               #}
+{#                      coerce=int,                                                                                #}
+{#                      widget=forms.Select(attrs={'class': 'form-control input-sm',                               #}
+{#                                                 'style':'margin-left: 6px; margin-right: 6px; max-width: 60px; text-center' }))  #}
+{#                                                                                                                 #}
+{#                  atualizar = forms.BooleanField(                                                                #}
+{#                      required=False,      # O default é True                                                    #}
+{#                      initial=False,                                                                             #}
+{#                      widget=forms.HiddenInput)                                                                  #}
+
+{#                                      /carrinho/adicionar/6                                                      #}
+    <form class="form-inline" action="{% url "carrinho:adicionar_ao_carrinho" produto.id %}" method="post">
+        {{ form_adicionar_produto_carrinho }}         {# *1 #}
+        {% csrf_token %}                              {# *2 #}
+        <input class="btn btn-primary" type="submit" value="Adicionar ao carrinho">
+    </form>
+
+{#    <form class="form-inline" action="/carrinho/adicionar/6/" method="post">                      #}
+{#  *1    <label for="id_quantidade">Quantidade :</label>                                           #}
+{#  *1    <select name="quantidade"                                                                 #}
+{#  *1            class="form-control input-sm"                                                     #}
+{#  *1            style="margin-left: 6px; margin-right: 6px; max-width: 60px; text-center"         #}
+{#  *1            id="id_quantidade">                                                               #}
+{#  *1        <option value="1">1</option>                                                          #}
+{#  *1        <option value="2">2</option>                                                          #}
+{#  *1        ...                                                                                   #}
+{#  *1        <option value="20">20</option>                                                        #}
+{#  *1    </select>                                                                                 #}
+{#  *1    <input type="hidden" name="atualizar" value="False" id="id_atualizar">                    #}
+{#                                                                                                  #}
+{#  *2    <input type="hidden" name="csrfmiddlewaretoken" value="SQfkQboHTPpLLAVYucgt5JAE3vrom780cnHZ1Tz8oBcH9HNKJhklzOfgzGwriLjg">  #}
+{#        <input class="btn btn-primary" type="submit" value="Adicionar ao carrinho">                                                #}
+{#    </form>

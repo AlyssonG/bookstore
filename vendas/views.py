@@ -28,8 +28,11 @@ def exibe_produto(request, id, slug_do_produto):
     # Exemplo: http://www.dominio.com.br/produto?id=721 <== Ruim
     # Exemplo: http://www.dominio.com.br/721/notebook-del-vostro-3458-i3 <== Bom
     produto = get_object_or_404(Produto, id=id, disponivel=True)
+    form_adicionar_produto_carrinho = FormularioParaAdicaoDeProdutosAoCarrinho()
     return render(
-        request, 'vendas/produto/exibe.html', {'produto': produto})
+        request, 'vendas/produto/exibe.html', {'produto': produto,
+                                               'form_adicionar_produto_carrinho': form_adicionar_produto_carrinho})
+
 
 
 def get_menu_categorias():
