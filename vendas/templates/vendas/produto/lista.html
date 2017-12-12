@@ -99,49 +99,4 @@
             </div>
         </div>
     </div>
-
-    {##}
-    {#    <div class="container">#}
-    {#        <div class="row">#}
-    {#            <div class="col-sm-12">#}
-    {#                <div class="row">#}
-    {#                    <div class="col-sm-3">#}
-    {#                        <h2>Categorias</h2>#}
-    {#                        <ul class="nav nav-pills nav-stacked">#}
-    {#                            <li {% if not categoria %}class="active"{% endif %}>#}
-    {#                                <a href="{% url 'vendas:lista_produtos' %}">Todos</a>#}
-    {#                            </li>#}
-    {#                            {% for c in categorias %}#}
-    {#                                <li {% if categoria.slug == c.slug %}class="active"{% endif %}>#}
-    {#                                    <a href="{{ c.get_absolute_path }}">{{ c.nome }}</a>#}
-    {#                                </li>#}
-    {#                            {% endfor %}#}
-    {#                        </ul>#}
-    {#                    </div>#}
-    {##}
-    {#                    <div class="col-sm-9">#}
-    {#                        <h2>{% if not categoria %}Produtos{% else %}{{ categoria.nome }}{% endif %}</h2>#}
-    {#                        <div class="row">#}
-    {#                            {% for produto in produtos %}#}
-    {#                                <div class="col-md-4 col-sm-6">#}
-    {#                                    <div class="thumbnail">#}
-    {#                                        <a href="{{ produto.get_absolute_path }}">#}
-    {#                                            <img class="img-rounded img-responsive center-block"#}
-    {#                                                 src="{% static '/vendas/imagens/' %}{{ produto.imagem }}" height="220" width="150">#}
-    {#                                        </a>#}
-    {#                                        <div class="caption">#}
-    {#                                            <h4><a href="{{ produto.get_absolute_path }}">{{ produto.nome }}</a></h4>#}
-    {#                                            R$ {{ produto.preco }}#}
-    {#                                            <br>#}
-    {#                                            <br>#}
-    {#                                        </div>#}
-    {#                                    </div>#}
-    {#                                </div>#}
-    {#                            {% endfor %}#}
-    {#                        </div>#}
-    {#                    </div>#}
-    {#                </div>#}
-    {#            </div>#}
-    {#        </div>#}
-    {#    </div>#}
 {% endblock %}

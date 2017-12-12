@@ -23,7 +23,15 @@
 </nav>
 
 <div class="well well-md">
-    &nbsp;
+    &nbsp;<div class="well well-md">
+        <div class="container">
+            <div class="row">
+                <div class="text-right">
+                    <a href="{% url "carrinho:detalhes_do_carrinho" %}"><span class="glyphicon glyphicon-shopping-cart"></span> Carrinho de Compras</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% block conteudo %}
