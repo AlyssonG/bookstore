@@ -3,8 +3,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('vendas.urls', namespace='vendas'))
+    url(r'^', include('vendas.urls', namespace='vendas')),
+    url(r'^carrinho/', include('carrinho.urls', namespace='carrinho'))  # Esta entrada deve aparecer antes da última
 
-    # http://localhost:8000  ==>  Exibirá a página de abertura do site que exibe a lista de produtos disponíveis
-    # Não é preciso o url: http://localhost:8000/vendas
 ]
