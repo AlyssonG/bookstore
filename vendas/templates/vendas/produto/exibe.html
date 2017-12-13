@@ -1,5 +1,11 @@
 {% include "vendas/base.html" with menu = items %}
 
+{% block navbar %}
+    {% with menu as itens %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
 {% load static %}
 
 {% block titulo %}
