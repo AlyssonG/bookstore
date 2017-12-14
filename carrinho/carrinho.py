@@ -29,7 +29,7 @@ class Carrinho(object):
         produto_id = str(produto.id)
 
         if produto_id not in self.carrinho:
-            self.carrinho[produto_id] = {'id': produto_id, 'quantidade': 0, 'preco': str(produto_id.preco)}
+            self.carrinho[produto_id] = {'id': produto_id, 'quantidade': 0, 'preco': str(produto.preco)}
 
         if atualiza_quantidade:
             self.carrinho[produto_id]['quantidade'] = quantidade

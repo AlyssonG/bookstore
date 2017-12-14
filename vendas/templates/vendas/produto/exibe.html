@@ -1,4 +1,4 @@
-{% include "vendas/base.html" with menu = items %}
+{% extends "vendas/base.html" %}
 
 {% block navbar %}
     {% with menu as itens %}
@@ -25,9 +25,12 @@
                 <h3><a href="{{ produto.categoria.get_absolute_path }}">{{ produto.categoria.nome }}</a></h3>
                 <p>R$ {{ produto.preco }}</p>
                 <form class="form-inline" action="{% url "carrinho:adicionar_ao_carrinho" produto.id %}" method="post">
-                    {{ form_adicionar_produto_carrinho }}         {# *1 #}
-                    {% csrf_token %}                              {# *2 #}
-                    <input class="btn btn-primary" type="submit" value="Adicionar ao carrinho">
+                    {{ form_adicionar_produto_carrinho }} {# *1 #}
+                    {{ item.atualizar_quantidade_form.quantidade }}
+                    {{ item.atualizar_quantidade_form.atualizar }}
+                    {% csrf_token %} {# *2 #}
+                    <input class="btn btn-primary btn-sm" type="submit" value="Atualizar">
+{#                    <a class="btn btn-danger btn-sm" href="{% url 'carrinho:remover_do_carrinho' item.id %}">Remover</a>#}
                 </form>
                 <p>{{ produto.descricao }}</p>
             </div>

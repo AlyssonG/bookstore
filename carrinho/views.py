@@ -8,6 +8,7 @@ from .forms import FormularioParaAdicaoDeProdutosAoCarrinho
 def adicionar_ao_carrinho(request, id_produto):   # Essa view recebe o id do produto
     carrinho = Carrinho(request)
     produto = get_object_or_404(Produto, id=id_produto)
+    print(produto.preco)
     # a view valida o formulário
     form = FormularioParaAdicaoDeProdutosAoCarrinho(request.POST)
     if form.is_valid():  # executa as rotinas de validação para todos os campos do formulário. Quando este método
@@ -19,8 +20,8 @@ def adicionar_ao_carrinho(request, id_produto):   # Essa view recebe o id do pro
         # Se o formulário for válido, adicionamos ou atualizamos o
         # produto no carrinho na qtd informada.
         carrinho.adicionar(produto=produto,
-                 quantidade=cd['quantidade'],
-                 atualiza_quantidade=cd['atualizar'])
+                         quantidade=cd['quantidade'],
+                         atualiza_quantidade=cd['atualizar'])
     # A view redireciona para o detalhes_do_carrinho URL que irá exibir o conteúdo do carrinho.
     return redirect('carrinho:detalhes_do_carrinho') # Este redirect fará com que a requisição seja redirecionada
                                                      # para http://127.0.0.1:8000/carrinho
