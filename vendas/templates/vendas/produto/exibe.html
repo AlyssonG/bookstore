@@ -29,8 +29,7 @@
                     {{ item.atualizar_quantidade_form.quantidade }}
                     {{ item.atualizar_quantidade_form.atualizar }}
                     {% csrf_token %} {# *2 #}
-                    <input class="btn btn-primary btn-sm" type="submit" value="Atualizar">
-{#                    <a class="btn btn-danger btn-sm" href="{% url 'carrinho:remover_do_carrinho' item.id %}">Remover</a>#}
+                    <input class="btn btn-primary btn-sm" type="submit" value="Adicionar">
                 </form>
                 <p>{{ produto.descricao }}</p>
             </div>
